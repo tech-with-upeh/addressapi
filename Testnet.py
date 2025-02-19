@@ -1,11 +1,7 @@
-
 from mnemonic import Mnemonic
-
 from bit import Key
-
 from eth_account import Account
 from bip32utils import BIP32Key
-
 import hashlib
 import base58
 import ecdsa
@@ -85,9 +81,8 @@ def convertbits(data, frombits, tobits, pad=True):
     return ret
 
 # Function to generate Bitcoin address from WIF or Seed Phrase
-class BitcoinAddress:
-    def __init__(self,seed_phrase=None, wif=None):
-        
+class TestnetAddress:
+    def __init__(self, seed_phrase=None, wif=None):
         self.seed_phrase = seed_phrase
         self.wif = wif
 
@@ -97,7 +92,6 @@ class BitcoinAddress:
         
         # Decode WIF private key if provided
         if wif:
-            #wif = wif.encode('utf-8')
             self.private_key = self.decode_wif(wif)
 
         # Generate the public key from the private key
@@ -148,18 +142,17 @@ class BitcoinAddress:
         ripemd160_P2WPKH_VO.update(sha256_P2WPKH_VO.digest())
         hashed_P2WPKH_VO = ripemd160_P2WPKH_VO.digest()
         P2SH_P2WPKH_V0 = bytes.fromhex(f'a9{hashed_P2WPKH_VO.hex()}87')
-        checksum_full = hashlib.sha256(hashlib.sha256(bytes.fromhex(f'05{hashed_P2WPKH_VO.hex()}')).digest()).digest()
+        checksum_full = hashlib.sha256(hashlib.sha256(bytes.fromhex(f'c4{hashed_P2WPKH_VO.hex()}')).digest()).digest()
         checksum = checksum_full[:4]
-        bin_addr = bytes.fromhex(f'05{hashed_P2WPKH_VO.hex()}{checksum.hex()}')
+        bin_addr = bytes.fromhex(f'c4{hashed_P2WPKH_VO.hex()}{checksum.hex()}')
         return base58.b58encode(bin_addr).decode()
 
     def generate_bech32_address(self, keyhash):
         """Generate Bech32 address from keyhash"""
-        return bech32_encode('bc', [0] +  convertbits(keyhash, 8, 5))
-   
+        return bech32_encode('tb', [0] + convertbits(keyhash, 8, 5))
 
-
-class Eth_addr:
+# Ethereum Address Generator Class
+class testEth_addr:
     def __init__(self, phrase=None, wif=None):
         self.phrase = phrase
         self.wif = wif
@@ -181,7 +174,8 @@ class Eth_addr:
                 self.public_key = e
                 self.address = e
 
-class Sol_addr:
+# Solana Address Generator Class
+class testSol_addr:
     def __init__(self, phrase=None, private_key=None):
         self.phrase = phrase
         self.private_key = private_key
@@ -192,35 +186,20 @@ class Sol_addr:
         if self.phrase:
             self.sol_keypair = Keypair().from_seed_phrase_and_passphrase(seed_phrase=self.phrase, passphrase='')
             self.addr = self.sol_keypair.pubkey()
-            self.private_key = self.sol_keypair
+            self.private_key = base58.b58encode(self.sol_keypair.secret()).decode()
 
-##################################################
-#    documentation                               #
-#                                                #
-##################################################
-#bitcoin (only phrase and wif private key)
-#
-# cls = BitcoinAddress(wif='KxYN4B5LvvmikjNb6QMkWGwV27BmRJSPqaCaUVdaywn9936wNWof')
-# print('priv', cls.private_key.hex(),'\n', 'pub', cls.public_key.hex(), '\n', 'p2sh', cls.nested_address, '\n', 'native segwit', cls.bech32_address)
+# Example Usage
+# seed_phrase = "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about"
+# bitcoin_wallet = TestnetAddress(wif='KxYN4B5LvvmikjNb6QMkWGwV27BmRJSPqaCaUVdaywn9936wNWof')
 
+# print(f"🔹 Nested SegWit Address (P2SH)  : {bitcoin_wallet.nested_address}")
+# print(f"🔹 Bech32 Address (SegWit): {bitcoin_wallet.bech32_address}")
+# print(f"🔹 Private key: {bitcoin_wallet.private_key.hex()}")
 
-# # print('[____Solana____]')
-# # #sol (only phrase and 64 length private key)
-# # #
-# cls = Sol_addr(private_key='3A181ieDw9j3iZKihpv4tffAad5i4a2Gz7mqGSVacoKdfGJivkFDniMvqCyFH32zh9QdKqdNRBd8ytiMxvVZkasT')
-# print(cls.addr)
-# print(cls.private_key)
+# eth_wallet = Eth_addr(phrase=seed_phrase)
+# print(f"🔹 Ethereum Address: {eth_wallet.address}")
+# print(f"🔹 Ethereum Private Key: {eth_wallet.private_key}")
 
-# cls = Eth_addr(wif='0xfadeb7970eab5b7a48676a3c0f0f6bfac043bb1c3349201e04349fdd2b8e2490')
-# print(f"""
-# #        addr ----> {cls.address}
-# #        priv key ----> {cls.private_key}
-# #        pub key ----> {str(cls.public_key)}
-
-# #        """)
-
-
-
-
-
-
+# sol_wallet = Sol_addr(phrase=seed_phrase)
+# print(f"🔹 Solana Address: {sol_wallet.addr}")
+# print(f"🔹 Solana Private Key: {sol_wallet.private_key}")
