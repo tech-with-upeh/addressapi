@@ -1,0 +1,9 @@
+mnemonic
+bit
+eth-account
+bip32utils
+hashlib
+base58
+ecdsa
+solders
+requests
