@@ -18,20 +18,20 @@ def get_btc_addr(test):
         if data.get('param') == 'p':
             cls = TestnetAddress(seed_phrase=data.get('phrase'))
             bal = BalanceApi(cls.bech32_address, 0, test=True).__repr__()
-            return jsonify({ 'private key': cls.private_key.hex(), 'public_key': cls.public_key.hex(),'native address': cls.bech32_address, 'segwit': cls.nested_address, 'balance': bal})
+            return jsonify({ 'private key': cls.private_key.hex(), 'public_key': cls.public_key.hex(),'address': cls.bech32_address, 'segwit': cls.nested_address, 'balance': bal})
         elif data.get('param') == 'w':
             cls = TestnetAddress(wif=data.get('phrase'))
             bal = BalanceApi(cls.bech32_address, 0, test=True).__repr__()
-            return jsonify({ 'private key': cls.private_key.hex(), 'public key': cls.public_key.hex(),'native address': cls.bech32_address, 'segwit': cls.nested_address,  'balance': bal})
+            return jsonify({ 'private key': cls.private_key.hex(), 'public key': cls.public_key.hex(),'address': cls.bech32_address, 'segwit': cls.nested_address,  'balance': bal})
         else:
             return jsonify({'error': 'Invalid parameter'}), 400
     data = request.get_json()
     if data.get('param') == 'p':
         cls = BitcoinAddress(seed_phrase=data.get('phrase'))
-        return jsonify({ 'private key': cls.private_key.hex(), 'public_key': cls.public_key.hex(),'native address': cls.bech32_address, 'segwit': cls.nested_address,  'balance': BalanceApi(cls.bech32_address, 0, test=False)})
+        return jsonify({ 'private key': cls.private_key.hex(), 'public_key': cls.public_key.hex(),'address': cls.bech32_address, 'segwit': cls.nested_address,  'balance': BalanceApi(cls.bech32_address, 0, test=False)})
     elif data.get('param') == 'w':
         cls = BitcoinAddress(wif=data.get('phrase'))
-        return jsonify({ 'private key': cls.private_key.hex(), 'public key': cls.public_key.hex(),'native address': cls.bech32_address, 'segwit': cls.nested_address,  'balance': BalanceApi(cls.bech32_address, 0, test=False)})
+        return jsonify({ 'private key': cls.private_key.hex(), 'public key': cls.public_key.hex(),'address': cls.bech32_address, 'segwit': cls.nested_address,  'balance': BalanceApi(cls.bech32_address, 0, test=False)})
     else:
         return jsonify({'error': 'Invalid parameter'}), 400
 
