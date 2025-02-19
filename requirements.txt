@@ -7,3 +7,4 @@ ecdsa
 solders
 requests
 gunicorn
+flask
