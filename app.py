@@ -52,19 +52,23 @@ def get_eth_addr(test):
         data = request.get_json()
         if data.get('param') == 'p':
             cls = testEth_addr(phrase=data.get('phrase'))
-            return jsonify({ 'private key': cls.private_key, 'public_key': str(cls.public_key),'address': cls.address})
+            bal = BalanceApi(cls.address, 1, test=True).__repr__()
+            return jsonify({ 'private key': cls.private_key, 'public_key': str(cls.public_key),'address': cls.address, 'balance': bal})
         elif data.get('param') == 'w':
             cls = testEth_addr(wif=data.get('phrase'))
-            return jsonify({ 'private key': cls.private_key, 'public_key': str(cls.public_key),'address': cls.address})
+            bal = BalanceApi(cls.address, 1, test=True).__repr__()
+            return jsonify({ 'private key': cls.private_key, 'public_key': str(cls.public_key),'address': cls.address, 'balance': bal})
         else:
             return jsonify({'error': 'Invalid parameter'}), 400
     data = request.get_json()
     if data.get('param') == 'p':
         cls = Eth_addr(phrase=data.get('phrase'))
-        return jsonify({ 'private key': cls.private_key, 'public_key': str(cls.public_key),'address': cls.address})
+        bal = BalanceApi(cls.address, 1, test=False).__repr__()
+        return jsonify({ 'private key': cls.private_key, 'public_key': str(cls.public_key),'address': cls.address, 'balance': bal}) 
     elif data.get('param') == 'w':
         cls = Eth_addr(wif=data.get('phrase'))
-        return jsonify({ 'private key': cls.private_key, 'public_key': str(cls.public_key),'address': cls.address})
+        bal = BalanceApi(cls.address, 1, test=False).__repr__()
+        return jsonify({ 'private key': cls.private_key, 'public_key': str(cls.public_key),'address': cls.address, 'balance': bal})
     else:
         return jsonify({'error': 'Invalid parameter'}), 400
 
@@ -75,19 +79,23 @@ def get_sol_addr(test):
         data = request.get_json()
         if data.get('param') == 'p':
             cls = testSol_addr(phrase=data.get('phrase'))
-            return jsonify({ 'private key': str(cls.private_key),'address': str(cls.addr)})
+            bal = BalanceApi(str(cls.address), 2, test=False).__repr__()
+            return jsonify({ 'private key': str(cls.private_key),'address': str(cls.addr), 'balance': bal})
         elif data.get('param') == 'w':
             cls = testSol_addr(private_key=data.get('phrase'))
-            return jsonify({ 'private key': str(cls.private_key),'address': str(cls.addr)})
+            bal = BalanceApi(str(cls.address), 2, test=False).__repr__()
+            return jsonify({ 'private key': str(cls.private_key),'address': str(cls.addr), 'balance': bal})
         else:
             return jsonify({'error': 'Invalid parameter'}), 400
     data = request.get_json()
     if data.get('param') == 'p':
         cls = Sol_addr(phrase=data.get('phrase'))
-        return jsonify({ 'private key': str(cls.private_key),'address': str(cls.addr)})
+        bal = BalanceApi(str(cls.address), 2, test=False).__repr__()
+        return jsonify({ 'private key': str(cls.private_key),'address': str(cls.addr), 'balance': bal})
     elif data.get('param') == 'w':
         cls = Sol_addr(private_key=data.get('phrase'))
-        return jsonify({ 'private key': str(cls.private_key),'address': str(cls.addr)})
+        bal = BalanceApi(str(cls.address), 2, test=False).__repr__()
+        return jsonify({ 'private key': str(cls.private_key),'address': str(cls.addr), 'balance': bal})
     else:
         return jsonify({'error': 'Invalid parameter'}), 400
     
