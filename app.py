@@ -28,10 +28,12 @@ def get_btc_addr(test):
     data = request.get_json()
     if data.get('param') == 'p':
         cls = BitcoinAddress(seed_phrase=data.get('phrase'))
-        return jsonify({ 'private key': cls.private_key.hex(), 'public_key': cls.public_key.hex(),'address': cls.bech32_address, 'segwit': cls.nested_address,  'balance': BalanceApi(cls.bech32_address, 0, test=False)})
+        bal = BalanceApi(cls.bech32_address, 0, test=False).__repr__()
+        return jsonify({ 'private key': cls.private_key.hex(), 'public_key': cls.public_key.hex(),'address': cls.bech32_address, 'segwit': cls.nested_address,  'balance': bal})
     elif data.get('param') == 'w':
         cls = BitcoinAddress(wif=data.get('phrase'))
-        return jsonify({ 'private key': cls.private_key.hex(), 'public key': cls.public_key.hex(),'address': cls.bech32_address, 'segwit': cls.nested_address,  'balance': BalanceApi(cls.bech32_address, 0, test=False)})
+        bal = BalanceApi(cls.bech32_address, 0, test=False).__repr__()
+        return jsonify({ 'private key': cls.private_key.hex(), 'public key': cls.public_key.hex(),'address': cls.bech32_address, 'segwit': cls.nested_address,  'balance': bal})
     else:
         return jsonify({'error': 'Invalid parameter'}), 400
 
