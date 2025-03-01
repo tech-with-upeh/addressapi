@@ -79,11 +79,11 @@ def get_sol_addr(test):
         data = request.get_json()
         if data.get('param') == 'p':
             cls = testSol_addr(phrase=data.get('phrase'))
-            bal = BalanceApi(str(cls.addr), 2, test=False).__repr__()
+            bal = BalanceApi(str(cls.addr), 2, test=True).__repr__()
             return jsonify({ 'private key': str(cls.private_key),'address': str(cls.addr), 'balance': bal})
         elif data.get('param') == 'w':
             cls = testSol_addr(private_key=data.get('phrase'))
-            bal = BalanceApi(str(cls.addr), 2, test=False).__repr__()
+            bal = BalanceApi(str(cls.addr), 2, test=True).__repr__()
             return jsonify({ 'private key': str(cls.private_key),'address': str(cls.addr), 'balance': bal})
         else:
             return jsonify({'error': 'Invalid parameter'}), 400
