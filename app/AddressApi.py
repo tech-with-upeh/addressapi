@@ -8,7 +8,7 @@ import ecdsa
 from solders.keypair import Keypair
 from solders.pubkey import Pubkey
 
-CHARSET = "qpzry9x8gf2tvd0s3jn54khce6mua7l".replace('tvd', 'tv')
+CHARSET = "qpzry9x8gf2tvdw0s3jn54khce6mua7l"
 
 def bech32_polymod(values):
     generator = [0x3b6a57b2, 0x26508e6d, 0x1ea119fa, 0x3d4233dd, 0x2a1462b3]
@@ -122,12 +122,12 @@ class Eth_addr:
         self.phrase = phrase
         self.wif = wif
         Account.enable_unaudited_hdwallet_features()
-        if phrase:
-            acct = Account.from_mnemonic(phrase)
+        if self.phrase:
+            acct = Account.from_mnemonic(self.phrase)
             self.private_key = '0x' + acct._private_key.hex()
             self.public_key = acct._key_obj.public_key
             self.address = acct.address
-        if wif:
+        if self.wif:
             try:
                 acct = Account.from_key(wif)
                 self.private_key = '0x' + acct._private_key.hex()
@@ -142,11 +142,11 @@ class Sol_addr:
     def __init__(self, phrase=None, private_key=None):
         self.phrase = phrase
         self.private_key = private_key
-        if private_key:
-            key_to_bytes = base58.b58decode(private_key)
+        if self.private_key:
+            key_to_bytes = base58.b58decode(self.private_key)
             self.sol_keypair = Keypair.from_bytes(key_to_bytes[:64])
             self.addr = self.sol_keypair.pubkey()
-        if phrase:
+        if self.phrase:
             self.sol_keypair = Keypair().from_seed_phrase_and_passphrase(seed_phrase=phrase, passphrase='')
             self.addr = self.sol_keypair.pubkey()
             self.private_key = self.sol_keypair
